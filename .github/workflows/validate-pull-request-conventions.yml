@@ -80,15 +80,15 @@ jobs:
           # Check labels
           LABELS=$(gh pr view $PULL_REQUEST_NUMBER --json labels -q '.labels[].name' --repo $GITHUB_REPOSITORY)
           if [[ -z "$LABELS" ]]; then
-            echo "ℹ️ No labels found, adding Enhancement label"
-            gh pr edit $PULL_REQUEST_NUMBER --add-label "Enhancement" --repo $GITHUB_REPOSITORY
+            echo "❌ Pull request must have at least one label"
+            EXIT_CODE=1
           fi
 
           # Check assignee
           ASSIGNEES=$(gh pr view $PULL_REQUEST_NUMBER --json assignees -q '.assignees[].login' --repo $GITHUB_REPOSITORY)
           if [[ -z "$ASSIGNEES" ]]; then
-            echo "ℹ️ No assignees found, adding pull request author as assignee"
-            gh pr edit $PULL_REQUEST_NUMBER --add-assignee "$PULL_REQUEST_AUTHOR" --repo $GITHUB_REPOSITORY
+            echo "❌ Pull request must have at least one assignee"
+            EXIT_CODE=1
           fi
 
           if [[ "$EXIT_CODE" -eq 0 ]]; then
